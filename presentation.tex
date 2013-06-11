@@ -6,12 +6,9 @@
 \usepackage{color}
 %\usepackage{units}
 \usepackage{amsmath}
-\usepackage{pgfplots}
+%\usepackage{pgfplots}
 \usepackage{tcolorbox}
-\usepackage{fancybox}
-
-\usepackage{tikz}
-\usetikzlibrary{shapes.geometric}
+\usepackage{bibentry}
 
 \usecolortheme{orchid}
 \usetheme{boxes}
@@ -34,6 +31,8 @@
            The University of Texas at Austin}
 
 \begin{document}
+
+
 
 \begin{frame}
   \titlepage{}
@@ -67,46 +66,46 @@
   
   \end{frame}
 
-\begin{frame}{Problem Description}
-
-  \begin{block}{Rare Event System}
-    A chemical system where the atoms spend large amount of time in each energy basin
-    before transitioning to the next.
-  \end{block}
-
-  \begin{columns}[T]
-
-    \begin{column}[l]{0.5\textwidth}
-      \begin{itemize}
-
-        \item Cannot use molecular dynamics
-
-      \end{itemize}
-
-      \includegraphics[width=0.9\textwidth]{images/rare-event}
-
-    \end{column}
-
-    \begin{column}[r]{0.5\textwidth}
-
-      How to efficiency model the state-to-state dynamics? 
-
-      \begin{itemize}
-        \item Parallelize over time
-        \item Accelerated Dynamics
-          \begin{itemize}
-            \item Alter potential energy surface
-            \item Increase temperature
-          \end{itemize}
-        \item \alert<2>{Statistical mechanics}
-      \end{itemize}
-    \end{column}
-  \end{columns}
-  \vspace{2mm}
-  \tiny
-  Reproduced from Art Voter's ``Introduction to The Kinetic Monte Carlo Method''
-
-\end{frame}
+%\begin{frame}{Problem Description}
+%
+%  \begin{block}{Rare Event System}
+%    A chemical system where the atoms spend large amount of time in each energy basin
+%    before transitioning to the next.
+%  \end{block}
+%
+%  \begin{columns}[T]
+%
+%    \begin{column}[l]{0.5\textwidth}
+%      \begin{itemize}
+%
+%        \item Cannot use molecular dynamics
+%
+%      \end{itemize}
+%
+%      \includegraphics[width=0.9\textwidth]{images/rare-event}
+%
+%    \end{column}
+%
+%    \begin{column}[r]{0.5\textwidth}
+%
+%      How to efficiency model the state-to-state dynamics? 
+%
+%      \begin{itemize}
+%        \item Parallelize over time
+%        \item Accelerated Dynamics
+%          \begin{itemize}
+%            \item Alter potential energy surface
+%            \item Increase temperature
+%          \end{itemize}
+%        \item \alert<2>{Statistical mechanics}
+%      \end{itemize}
+%    \end{column}
+%  \end{columns}
+%  \vspace{2mm}
+%  \tiny
+%  Reproduced from Art Voter's ``Introduction to The Kinetic Monte Carlo Method''
+%
+%\end{frame}
 
 
 \begin{frame}{Kinetic Monte Carlo}
@@ -182,6 +181,7 @@ How to build the Markov model? How to get the states and the rates?
 
     \end{column}
   \end{columns}
+ {\tiny L. Xu and G. Henkelman, \textit{J. Chem. Phys.} \textbf{129}, 114104 (2008).}
 \end{frame}
 
 %\begin{frame}{Calculating Reaction Rates using HTST}
@@ -273,6 +273,29 @@ How to build the Markov model? How to get the states and the rates?
 \end{frame}
 
 
+
+\begin{frame}{Pros and Cons of MD Displacements compared to Random}
+ \begin{tcolorbox}[title=Pros,colback=white,colframe=green!50!black,]
+    \setbeamercolor{itemize item}{fg=black}
+    \begin{itemize}
+	\item Finds events with probability proportional to their rate
+	\item Can estimate a confidence in the total rate found
+	\item Reduced chance of finding disconnected events
+	\item No prior knowledge needed about reaction coordinate
+    \end{itemize}
+  \end{tcolorbox}
+
+  \vspace{2mm}
+
+  \begin{tcolorbox}[title=Cons,colback=white,colframe=red!50!black,]
+    \setbeamercolor{itemize item}{fg=black}
+    \begin{itemize}
+	\item MD displacement is more expensive than random
+	\item NEB not guaranteed to find all pathways 
+    \end{itemize}
+  \end{tcolorbox}
+\end{frame}
+
 \begin{frame}{Estimating the Error in the Rate}
 
 \begin{equation*}
@@ -307,9 +330,16 @@ $F$: set of events that have been found
 
 \begin{frame}{Evaluating The Quality of the Error Estimator}
 
-\begin{center}
-\includegraphics[width=0.55\textwidth]{images/confidence-test.pdf}
-\end{center}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\centering Averaged over 50 runs
+\includegraphics[width=\columnwidth]{images/confidence-test.pdf}
+\end{column}
+\begin{column}{0.5\textwidth}
+\centering 1 run
+\includegraphics[width=\columnwidth]{images/confidence-test-noavg.pdf}
+\end{column}
+\end{columns}
 
 Times drawn from a harmonic system with rates calculated via HTST with 20 barriers linearly spaced between 0.1 and 0.4 eV.
 
@@ -317,7 +347,7 @@ Higher temperature sampling converges the total rate faster and reduces the bias
 
 \end{frame}
 
-\begin{frame}{Saddle Search Method Comparison}
+\begin{frame}{Efficiency Comparison Between Displacement Schemes}
 
 \begin{columns}
 \begin{column}{0.6\textwidth}
@@ -330,31 +360,11 @@ Higher temperature sampling converges the total rate faster and reduces the bias
 
 \end{column}
 \end{columns}
+\vspace{2mm}
+{\tiny S. T. Chill and G. Henkelman, \textbf{In. Prep.}}
 
 \end{frame}
 
-
-\begin{frame}{Pros and Cons of MD Displacements compared to Random}
- \begin{tcolorbox}[title=Pros,colback=white,colframe=green!50!black,]
-    \setbeamercolor{itemize item}{fg=black}
-    \begin{itemize}
-	\item Finds events with probability proportional to their rate
-	\item Can estimate a confidence in the total rate found
-	\item Reduced chance of finding disconnected events
-	\item No prior knowledge needed about reaction coordinate
-    \end{itemize}
-  \end{tcolorbox}
-
-  \vspace{2mm}
-
-  \begin{tcolorbox}[title=Cons,colback=white,colframe=red!50!black,]
-    \setbeamercolor{itemize item}{fg=black}
-    \begin{itemize}
-	\item MD displacement is more expensive than random
-	\item NEB not guaranteed to find all pathways 
-    \end{itemize}
-  \end{tcolorbox}
-\end{frame}
 
 \begin{frame}{\textbf{Part II} A second class of rare event problems}
   \begin{block}{Superbasin}
@@ -400,23 +410,27 @@ Higher temperature sampling converges the total rate faster and reduces the bias
       \begin{equation*}
         \mathbf{N}=\sum_{k=0}^\infty \mathbf{T}^k= {(\mathbf{I}-\mathbf{T})}^{-1} 
       \end{equation*}
-      Mean time until absorption:
+
+    \end{column}
+
+    \begin{column}[r]{0.5\textwidth}
+          Mean time until absorption:
             \vspace{-2mm}
       \begin{equation*}
         \mathbf{t} = \mathbf{N} \mathbf{\tau} 
       \end{equation*}
 
       {$\tau$ is a vector of mean escape times from the transient states}
-    \end{column}
-
-    \begin{column}[r]{0.5\textwidth}
-      Matrix of absorption probabilities:
+      
+      
       \begin{equation*}
         \mathbf{B}=\mathbf{N} \mathbf{R} 
       \end{equation*}
       $\mathbf{B}_{ij}$ is the probability of ending in state $j$ when starting in state $i$ 
     \end{column}
   \end{columns}
+  
+  {\tiny  M. A. Novotny, \textit{Phys. Rev. Lett.} \textbf{74}, 1--5 (1995).}
 
 \end{frame}
 
@@ -447,7 +461,8 @@ States $a$ and $b$ form a superbasin that takes 5 billion steps to escape from o
   \begin{center}
     \includegraphics[width=0.7\textwidth]{images/sib2i-pes}
   \end{center}
-
+  \vspace{-2mm}
+  {\tiny S. T. Chill,  M. Welborn, R. Terrell, L. Zhang, J. C. Berthet, A. Pedersen, H. Jonsson, and G. Henkelman \textbf{In Prep.}.}
 \end{frame}
 
 \begin{frame}{Performance of MCAMC}
@@ -609,7 +624,7 @@ Open-source code for solving AMC problems in high precision.
   \begin{center}
     \includegraphics[width=0.6\textwidth]{images/eon-website.png}
   \end{center}
-  \small{S. T. Chill,  M. Welborn, R. Terrell, L. Zhang, J. C. Berthet, A. Pedersen, H. Jonsson, and G. Henkelman \textit{Model. Simul. Mater. Sci. Eng}, \textbf{Submitted 2013}.}
+  {\tiny S. T. Chill,  M. Welborn, R. Terrell, L. Zhang, J. C. Berthet, A. Pedersen, H. Jonsson, and G. Henkelman \textbf{In Prep.}.}
 \end{frame}
 
 %
